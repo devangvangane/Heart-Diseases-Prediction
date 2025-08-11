@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import axios from 'axios'
 
 function App() {
 
@@ -8,19 +9,22 @@ function App() {
     age: "",
     mobile: "",
     address: "",
-    sex: "",
-    cp: "",
+    sex: "0",
+    cp: "0",
     trestbps: "",
     chol: "",
-    fbs: "",
-    restecg: "",
+    fbs: "0",
+    restecg: "0",
     thalach: "",
-    exang: "",
+    exang: "0",
     oldpeak: "",
-    slope: "",
-    ca: "",
-    thal: ""
+    slope: "0",
+    ca: "0",
+    thal: "0"
   });
+  const [result, setResult] = useState();
+  const [fetching, setFetching] = useState(false);
+  const [fetched, setFetched] = useState(false);
 
   const handleChange = (e) => {
     
@@ -29,15 +33,33 @@ function App() {
 
   const handleSubmit = async (e)=>{
     e.preventDefault();
-    // const res = 
+    setFetching(true);
+    console.log(formData)
+    try{
+
+      const res = await axios.post('http://127.0.0.1:8000/result/', formData);
+      setResult(res.data.result);
+      setFetched(true);
+    }
+    catch(err){
+      console.log(err);
+    }
+    setFetching(false);
   }
 
   return (
     <>
       <h1 className="text-2xl font-bold mb-4">Check Your Heart</h1>
-      <hr className="mb-6" />
-      <form className="flex gap-3 flex-col" onSubmit={handleSubmit}>
+      <form className={`flex gap-3 flex-col p-3 rounded-4xl
+            transition-colors duration-5 ${
+              fetched
+                ? result === 0
+                  ? 'bg-green-200/60'
+                  : 'bg-red-300'
+                : ' bg-violet-100'
+            }`} onSubmit={handleSubmit}>
         <h2 className="text-3xl font-semibold mb-2">Personal Details</h2>
+        <hr className="mb-6" />
         <div className="flex flex-row gap-6 justify-between">
           <div>
             <label className=" font-semibold">Patient name : </label>
@@ -102,6 +124,7 @@ function App() {
           </div>
         </div>
 
+        <h2 className="text-3xl font-semibold mb-2">Test Details</h2>
         <hr></hr>
         <div className="flex flex-row gap-6 justify-between">
           <div>
@@ -272,7 +295,16 @@ function App() {
         </div>
 
         <div className="flex flex-row gap-6 justify-center">
-          <button type="submit" className="w-2xs">Check Result</button>
+          <button type="submit" className="w-2xs bg-slate-300">Check Result</button>
+        </div>
+        <div className="flex flex-row gap-6 justify-center">
+            {fetching?<h2>Fetching Result...</h2>:<></>}
+            {fetched && result !== undefined && (
+              result === 0
+                ? <button disabled className="bg-green-400">Result : No heart problem predicted</button>
+                : <button disabled className="bg-red-600">Result : Heart problem predicted</button>
+            )}
+
         </div>
       </form>
     </>
