@@ -49,14 +49,14 @@ function App() {
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-4">Check Your Heart</h1>
-      <form className={`flex gap-3 flex-col p-3 rounded-4xl
+      <h1 className="text-2xl font-bold mb-4">Check Your Heart ❤️</h1>
+      <form className={`flex gap-3 flex-col p-3 rounded-2xl
             transition-colors duration-5 ${
               fetched
                 ? result === 0
                   ? 'bg-green-200/60'
                   : 'bg-red-300'
-                : ' bg-violet-100'
+                : ' bg-blue-300'
             }`} onSubmit={handleSubmit}>
         <h2 className="text-3xl font-semibold mb-2">Personal Details</h2>
         <hr className="mb-6" />
@@ -295,7 +295,7 @@ function App() {
         </div>
 
         <div className="flex flex-row gap-6 justify-center">
-          <button type="submit" className="w-2xs bg-slate-300">Check Result</button>
+          <button type="submit" className="w-2xs bg-slate-500">Check Result</button>
         </div>
         <div className="flex flex-row gap-6 justify-center">
             {fetching?<h2>Fetching Result...</h2>:<></>}
